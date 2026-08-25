@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deploys · Meridian</title>
+    <meta name="description" content="Meridian deploy health dashboard." />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/tokens.css" />
+    <link rel="stylesheet" href="/src/base.css" />
+    <link rel="stylesheet" href="/src/dashboard.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <div class="app">
+      <aside class="sidebar">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">M</span>
+          Meridian
+        </a>
+
+        <div>
+          <p class="sidebar__section-title">Workspace</p>
+          <nav class="sidebar__nav" aria-label="Workspace">
+            <a class="sidebar__link" aria-current="page" href="/dashboard.html">Deploys</a>
+            <a class="sidebar__link" href="/dashboard.html#services">Services</a>
+            <a class="sidebar__link" href="/dashboard.html#alerts">Alerts</a>
+            <a class="sidebar__link" href="/dashboard.html#reports">Reports</a>
+          </nav>
+        </div>
+
+        <div>
+          <p class="sidebar__section-title">Account</p>
+          <nav class="sidebar__nav" aria-label="Account">
+            <a class="sidebar__link" href="/dashboard.html#settings">Settings</a>
+            <a class="sidebar__link" href="/dashboard.html#billing">Billing</a>
+            <a class="sidebar__link" href="/">Sign out</a>
+          </nav>
+        </div>
+
+        <div class="sidebar__footer">
+          <span class="avatar" aria-hidden="true">RK</span>
+          <div>
+            <p class="sidebar__user-name">Rhea Kapoor</p>
+            <p class="sidebar__user-org">Northwind · Platform</p>
+          </div>
+        </div>
+      </aside>
+
+      <div class="workspace">
+        <header class="toolbar">
+          <div class="toolbar__heading">
+            <h1 class="toolbar__title">Deploys</h1>
+            <p class="toolbar__subtitle">All services · production · last 24 hours</p>
+          </div>
+
+          <div class="toolbar__actions">
+            <div class="segmented" role="group" aria-label="Time range">
+              <button class="segmented__option" type="button" aria-pressed="false">24h</button>
+              <button class="segmented__option" type="button" aria-pressed="true">7d</button>
+              <button class="segmented__option" type="button" aria-pressed="false">30d</button>
+            </div>
+            <button class="btn btn--secondary" type="button">Export CSV</button>
+            <button class="btn btn--primary" type="button">New deploy gate</button>
+          </div>
+        </header>
+
+        <main class="content" id="main">
+          <section class="stat-row" aria-label="Summary">
+            <div class="card stat">
+              <p class="stat__label">Deploys today</p>
+              <p class="stat__value">37</p>
+              <p class="stat__delta stat__delta--up">+9 vs. yesterday</p>
+            </div>
+            <div class="card stat">
+              <p class="stat__label">Change failure rate</p>
+              <p class="stat__value">4.1%</p>
+              <p class="stat__delta stat__delta--up">−1.8 pts this week</p>
+            </div>
+            <div class="card stat">
+              <p class="stat__label">Median p95 latency</p>
+              <p class="stat__value">218 ms</p>
+              <p class="stat__delta stat__delta--down">+14 ms since 09:40</p>
+            </div>
+            <div class="card stat">
+              <p class="stat__label">Open regressions</p>
+              <p class="stat__value">2</p>
+              <p class="stat__delta stat__delta--down">1 unassigned</p>
+            </div>
+          </section>
+
+          <section class="card chart-card" aria-labelledby="chart-title">
+            <div class="card__head">
+              <div>
+                <h2 class="card__title" id="chart-title">Request latency around deploys</h2>
+                <p class="card__subtitle">p95, all services, 09:00 – 17:00 UTC</p>
+              </div>
+              <div class="legend">
+                <span class="legend__item">
+                  <span class="legend__swatch" style="background: var(--color-brand-600)"></span>
+                  p95 latency
+                </span>
+                <span class="legend__item">
+                  <span class="legend__swatch" style="background: var(--color-neutral-300)"></span>
+                  baseline
+                </span>
+              </div>
+            </div>
+            <div id="chart-mount"></div>
+          </section>
+
+          <section class="card table-card" aria-labelledby="table-title">
+            <div class="card__head">
+              <div>
+                <h2 class="card__title" id="table-title">Recent deploys</h2>
+                <p class="card__subtitle">Scored automatically fifteen minutes after rollout completes</p>
+              </div>
+              <button class="btn btn--ghost" type="button">Filter</button>
+            </div>
+
+            <div class="table-scroll">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Service</th>
+                    <th scope="col">Commit</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Deployed</th>
+                    <th scope="col">p95 &Delta;</th>
+                    <th scope="col">Error rate</th>
+                    <th scope="col">Verdict</th>
+                    <th scope="col"><span class="visually-hidden">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="deploy-rows"></tbody>
+              </table>
+            </div>
+
+            <p class="empty-note">Showing 6 of 37 deploys. Older deploys are in Reports.</p>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <script type="module" src="/src/dashboard.js"></script>
+  </body>
+</html>

@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Meridian — deployment intelligence for engineering teams</title>
+    <meta
+      name="description"
+      content="Meridian correlates every deploy with the metrics that moved, so your team knows within ninety seconds whether a release was safe."
+    />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/src/tokens.css" />
+    <link rel="stylesheet" href="/src/base.css" />
+    <link rel="stylesheet" href="/src/marketing.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="brand" href="/">
+          <span class="brand__mark" aria-hidden="true">M</span>
+          Meridian
+        </a>
+
+        <nav class="site-nav" aria-label="Primary">
+          <a class="site-nav__link" href="#product">Product</a>
+          <a class="site-nav__link" href="#why">Why Meridian</a>
+          <a class="site-nav__link" href="#pricing">Pricing</a>
+          <a class="site-nav__link" href="/dashboard.html">Live demo</a>
+        </nav>
+
+        <div class="site-header__actions">
+          <a class="btn btn--ghost" href="/dashboard.html">Sign in</a>
+          <a class="btn btn--primary" href="#pricing">Start free trial</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="container hero__grid">
+          <div>
+            <span class="eyebrow">Deployment intelligence</span>
+            <h1 class="hero__title">Know whether the deploy was safe before the standup.</h1>
+            <p class="hero__lede">
+              Meridian watches every release across your services, ties it to the metrics that
+              actually moved, and tells you in plain language what changed — no dashboard
+              archaeology, no war room.
+            </p>
+            <div class="hero__actions">
+              <a class="btn btn--primary btn--lg" href="#pricing">Start free trial</a>
+              <a class="btn btn--secondary btn--lg" href="/dashboard.html">See a live dashboard</a>
+            </div>
+            <p class="hero__note">Free for 14 days · No credit card · SOC 2 Type II</p>
+          </div>
+
+          <div class="hero__panel" aria-hidden="true">
+            <div class="panel__chrome">
+              <span class="panel__dot"></span>
+              <span class="panel__dot"></span>
+              <span class="panel__dot"></span>
+              <span class="panel__title">meridian · production</span>
+            </div>
+            <div class="panel__body">
+              <div class="deploy-row">
+                <div>
+                  <div class="deploy-row__name">checkout-api&nbsp;·&nbsp;a3f19c2</div>
+                  <div class="deploy-row__meta">p95 latency, last 30 min</div>
+                </div>
+                <div class="deploy-row__value">−12%</div>
+              </div>
+              <div class="deploy-row">
+                <div>
+                  <div class="deploy-row__name">web-storefront&nbsp;·&nbsp;7d40e18</div>
+                  <div class="deploy-row__meta">error rate, last 30 min</div>
+                </div>
+                <div class="deploy-row__value">0.04%</div>
+              </div>
+              <div class="deploy-row">
+                <div>
+                  <div class="deploy-row__name">ledger-worker&nbsp;·&nbsp;bb92004</div>
+                  <div class="deploy-row__meta">queue depth, last 30 min</div>
+                </div>
+                <div class="deploy-row__value">+2.1k</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="logos">
+        <div class="container">
+          <p class="logos__label">Trusted by platform teams at</p>
+          <ul class="logos__list">
+            <li class="logos__item">Northwind</li>
+            <li class="logos__item">Halcyon</li>
+            <li class="logos__item">Petra Labs</li>
+            <li class="logos__item">Fathom</li>
+            <li class="logos__item">Kettle</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="product">
+        <div class="container">
+          <div class="section__head">
+            <span class="eyebrow">The product</span>
+            <h2 class="section__title">Three questions, answered automatically after every release.</h2>
+            <p class="section__lede">
+              Meridian ingests your deploy events and your existing telemetry. It does not ask you to
+              instrument anything new.
+            </p>
+          </div>
+
+          <div class="feature-grid">
+            <article class="card feature">
+              <div class="feature__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 17l6-6 4 4 7-8" />
+                  <path d="M14 7h6v6" />
+                </svg>
+              </div>
+              <h3 class="feature__title">Did anything regress?</h3>
+              <p class="feature__body">
+                Every deploy is scored against the fifteen minutes before it. Latency, error rate,
+                saturation and business metrics are compared with a change-point test, not a
+                threshold you have to tune.
+              </p>
+            </article>
+
+            <article class="card feature">
+              <div class="feature__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <path d="M12 7v5l3 2" />
+                </svg>
+              </div>
+              <h3 class="feature__title">Which change caused it?</h3>
+              <p class="feature__body">
+                Regressions are attributed to a commit range, an owning team and a service, so the
+                page goes to the person who can act instead of to everyone on rotation.
+              </p>
+            </article>
+
+            <article class="card feature">
+              <div class="feature__icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 6h16M4 12h10M4 18h7" />
+                </svg>
+              </div>
+              <h3 class="feature__title">What should we do now?</h3>
+              <p class="feature__body">
+                Roll back, hold the rollout, or ship on. Meridian writes the recommendation into the
+                pull request and into your incident channel with the evidence attached.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--sunken" id="why">
+        <div class="container">
+          <div class="section__head">
+            <span class="eyebrow">Why teams switch</span>
+            <h2 class="section__title">Fewer dashboards. Shorter incidents.</h2>
+            <p class="section__lede">
+              Numbers from 42 teams in their first quarter on Meridian, measured against their own
+              baseline from the quarter before.
+            </p>
+          </div>
+
+          <div class="metrics">
+            <div class="card metric">
+              <p class="metric__value">-38%</p>
+              <p class="metric__label">Median time to detect a bad deploy</p>
+            </div>
+            <div class="card metric">
+              <p class="metric__value">4.6&times;</p>
+              <p class="metric__label">More rollbacks caught before customer impact</p>
+            </div>
+            <div class="card metric">
+              <p class="metric__value">11 min</p>
+              <p class="metric__label">Median time from alert to owning engineer</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="pricing">
+        <div class="container">
+          <div class="section__head">
+            <span class="eyebrow">Pricing</span>
+            <h2 class="section__title">Priced per service, not per seat.</h2>
+            <p class="section__lede">
+              Invite everyone. Reviewers, on-call, support and your CTO cost nothing extra.
+            </p>
+          </div>
+
+          <div class="plans">
+            <article class="card plan">
+              <h3 class="plan__name">Starter</h3>
+              <p class="plan__price">
+                <span class="plan__amount">$0</span>
+                <span class="plan__period">up to 3 services</span>
+              </p>
+              <ul class="plan__features">
+                <li><span class="plan__check" aria-hidden="true">&check;</span> 7-day metric history</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Deploy scoring on every release</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Slack and GitHub delivery</li>
+              </ul>
+              <a class="btn btn--secondary" href="/dashboard.html">Create a workspace</a>
+            </article>
+
+            <article class="card plan plan--featured">
+              <h3 class="plan__name">Team</h3>
+              <p class="plan__price">
+                <span class="plan__amount">$40</span>
+                <span class="plan__period">per service / month</span>
+              </p>
+              <ul class="plan__features">
+                <li><span class="plan__check" aria-hidden="true">&check;</span> 13-month metric history</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Commit-range attribution</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Automatic rollback recommendations</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> PagerDuty and Opsgenie routing</li>
+              </ul>
+              <a class="btn btn--primary" href="/dashboard.html">Start free trial</a>
+            </article>
+
+            <article class="card plan">
+              <h3 class="plan__name">Enterprise</h3>
+              <p class="plan__price">
+                <span class="plan__amount">Custom</span>
+                <span class="plan__period">annual</span>
+              </p>
+              <ul class="plan__features">
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Self-hosted or in-VPC ingest</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> SSO, SCIM and audit export</li>
+                <li><span class="plan__check" aria-hidden="true">&check;</span> Named support engineer</li>
+              </ul>
+              <a class="btn btn--secondary" href="mailto:sales@meridian.example">Talk to sales</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="cta">
+        <div class="container">
+          <div class="cta__box">
+            <h2 class="cta__title">Ship on Friday again.</h2>
+            <p class="cta__lede">
+              Connect a repository and a metrics source. Meridian scores your next deploy the same
+              afternoon.
+            </p>
+            <a class="btn btn--secondary btn--lg" href="/dashboard.html">See a live dashboard</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="site-footer__grid">
+          <div>
+            <a class="brand" href="/">
+              <span class="brand__mark" aria-hidden="true">M</span>
+              Meridian
+            </a>
+            <p class="site-footer__blurb">
+              Deployment intelligence for teams that release more than once a day.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Product</h2>
+            <ul class="footer-col__list">
+              <li><a href="#product">Overview</a></li>
+              <li><a href="#pricing">Pricing</a></li>
+              <li><a href="/dashboard.html">Live demo</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Resources</h2>
+            <ul class="footer-col__list">
+              <li><a href="#product">Documentation</a></li>
+              <li><a href="#why">Changelog</a></li>
+              <li><a href="#why">Status</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h2 class="footer-col__title">Company</h2>
+            <ul class="footer-col__list">
+              <li><a href="#why">About</a></li>
+              <li><a href="mailto:sales@meridian.example">Contact</a></li>
+              <li><a href="#pricing">Security</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="site-footer__legal">
+          &copy; 2026 Meridian Systems, Inc. A demonstration project — not a real company.
+        </p>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/marketing.js"></script>
+  </body>
+</html>

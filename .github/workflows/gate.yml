@@ -1,0 +1,41 @@
+# Apature Gate — design review on every pull request.
+#
+# Lifted from https://github.com/apatureai/gate/blob/main/examples/gate.yml and
+# adapted for this repository: there is no deploy provider here, so Gate runs the
+# build itself under its own supervisor (`preview-command`) and reviews the page
+# it starts.
+#
+# Two repository secrets are required (Settings -> Secrets and variables -> Actions):
+#   GATE_ENGINE_ENDPOINT     base URL of the critique service you host
+#   GATE_ENGINE_HMAC_SECRET  the same value as that service's ENGINE_HMAC_SECRET
+#
+# Without them the step publishes a neutral "Engine not configured" Check Run and
+# reviews nothing; it never fails the pull request.
+
+name: Design review
+
+on: pull_request # NOT pull_request_target — see Gate's threat model.
+
+permissions:
+  contents: read # NEVER contents: write — Gate judges and reports, it never edits.
+  pull-requests: write # post the sticky comment
+  checks: write # post the Check Run
+
+jobs:
+  design-review:
+    runs-on: ubuntu-latest
+    steps:
+      # Required: `config-path` and `preview-command` both read files from the
+      # workspace, and Gate also reads package.json to tell the engine which
+      # component library to judge against.
+      - uses: actions/checkout@v4
+
+      - uses: apatureai/gate@v1
+        with:
+          # No deploy provider: Gate builds and serves the app itself and
+          # reviews http://127.0.0.1:3000 (GATE_LOCAL_SERVE_URL's default).
+          preview-command: "corepack enable && pnpm install --frozen-lockfile && pnpm build && pnpm preview"
+          config-path: .gate.yml
+        env:
+          GATE_ENGINE_ENDPOINT: ${{ secrets.GATE_ENGINE_ENDPOINT }}
+          GATE_ENGINE_HMAC_SECRET: ${{ secrets.GATE_ENGINE_HMAC_SECRET }}

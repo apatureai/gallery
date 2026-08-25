@@ -1,0 +1,48 @@
+# Apature Gate configuration for the Meridian gallery app.
+#
+# The workflow builds the app and serves it on the runner, so there is no
+# deploy provider to discover: `source: local` tells Gate the preview URL comes
+# from its own supervisor running `preview-command`.
+
+preview:
+  source: local
+  wait_seconds: 0
+
+routes:
+  always: ["/", "/dashboard.html"]
+  max_per_pr: 4
+
+viewports: [mobile, desktop]
+dark_mode: false
+
+brand: "Meridian — calm, dense, engineering-tool-neutral. Indigo is the only accent; status colour is reserved for status."
+
+rules:
+  gate: none # advisory while we get a feel for it; flip to `blockers` later
+  min_severity_to_comment: nit
+  measurements: advisory
+
+tokens:
+  # `source` is a pointer for humans and future tooling; Gate does not read the
+  # file. `values` is what actually reaches the critique service, so the two are
+  # kept in step by hand (see scripts/check-tokens.mjs for the CSS/JSON half).
+  source: design-tokens.json
+  values:
+    color-brand-600: "#4f46e5"
+    color-brand-700: "#4338ca"
+    color-neutral-0: "#ffffff"
+    color-neutral-500: "#64748b"
+    color-neutral-600: "#475569"
+    color-neutral-900: "#0f172a"
+    color-success-700: "#15803d"
+    color-warning-700: "#b45309"
+    color-danger-700: "#b91c1c"
+    space-1: "0.25rem"
+    space-2: "0.5rem"
+    space-3: "0.75rem"
+    space-4: "1rem"
+    space-6: "1.5rem"
+    space-8: "2rem"
+    radius-md: "8px"
+    radius-lg: "12px"
+    target-min: "44px"
