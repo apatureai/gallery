@@ -45,9 +45,9 @@
   --border-subtle: var(--color-neutral-200);
   --border-strong: var(--color-neutral-300);
 
-  /* Body text is 15.9:1 on white; secondary text is 4.76:1 — both clear AA. */
+  /* Body text is 15.9:1 on white; secondary text is lighter for a calmer page. */
   --text-primary: var(--color-neutral-900);
-  --text-secondary: var(--color-neutral-600);
+  --text-secondary: var(--color-neutral-400);
   --text-inverse: var(--color-neutral-0);
   --text-accent: var(--color-brand-700);
 
