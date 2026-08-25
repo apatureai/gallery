@@ -1,0 +1,118 @@
+# Design review, end to end, with no hosted service anywhere.
+#
+# WHY THIS EXISTS, AND WHY IT IS NOT `gate.yml`
+#
+# `gate.yml` is the workflow the Gate README tells you to copy. On this
+# repository it fails, for two reasons that have nothing to do with this app:
+#
+#  1. `apatureai/gate@v1` crashes on start in any repository other than Gate's
+#     own. Its Docker ENTRYPOINT is the relative path
+#     `node packages/action/dist/main.js`, and GitHub runs a Docker action with
+#     `--workdir /github/workspace` (your checkout), so Node looks for the
+#     action inside YOUR repository and exits with MODULE_NOT_FOUND.
+#     See: https://github.com/apatureai/gallery/actions (the "Design review" job).
+#
+#  2. Even once it starts, `preview-command` hands the critique service the URL
+#     `http://127.0.0.1:3000`. That address is the Gate container's own
+#     loopback. A critique service running anywhere else — a hosted one, or one
+#     on another host — cannot reach it, and Gate's own preview verification
+#     *requires* a local preview URL to be loopback. So the documented
+#     no-deploy-provider path only works when the engine shares a network
+#     namespace with the action.
+#
+# This workflow works around both, in this repository, without patching Gate:
+# it starts the critique service and the preview server on the runner itself,
+# then runs the Gate action image with `--network host` and an absolute
+# entrypoint. Everything else — HMAC signing, the job API, the capture, the
+# schema check, the sticky comment, the Check Run — is the real code path with
+# the runner's own GITHUB_TOKEN.
+
+name: Design review (self-hosted engine)
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Check out this app
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.34.3
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Build and serve the preview on the runner
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm build
+          PORT=4311 HOST=127.0.0.1 nohup node scripts/preview.mjs > /tmp/preview.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:4311/ >/dev/null && break || sleep 1
+          done
+          curl -sf -o /dev/null -w 'preview / -> %{http_code}\n' http://127.0.0.1:4311/
+          curl -sf -o /dev/null -w 'preview /dashboard.html -> %{http_code}\n' http://127.0.0.1:4311/dashboard.html
+
+      - name: Check out and start the critique service (apatureai/verdict)
+        run: |
+          git clone --depth 1 https://github.com/apatureai/verdict.git /tmp/verdict
+          cd /tmp/verdict
+          pnpm install --frozen-lockfile
+          pnpm browser:install
+          pnpm build
+          echo "ENGINE_HMAC_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+
+      - name: Serve the critique service on 127.0.0.1:8791
+        env:
+          ENGINE_HMAC_SECRET: ${{ env.ENGINE_HMAC_SECRET }}
+        run: |
+          cd /tmp/verdict
+          nohup node packages/serve/dist/main.js \
+            --port 8791 --host 127.0.0.1 --out /tmp/engine-out --model mock \
+            > /tmp/engine.log 2>&1 &
+          for i in $(seq 1 30); do
+            curl -s -o /dev/null http://127.0.0.1:8791/jobs && break || sleep 1
+          done
+          cat /tmp/engine.log
+
+      - name: Build the Gate action image
+        run: |
+          git clone --depth 1 https://github.com/apatureai/gate.git /tmp/gate
+          docker build -f /tmp/gate/Dockerfile.action -t gate-action:local /tmp/gate
+
+      - name: Run the Gate action against this pull request
+        env:
+          ENGINE_HMAC_SECRET: ${{ env.ENGINE_HMAC_SECRET }}
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          docker run --rm \
+            --network host \
+            --workdir /github/workspace \
+            --entrypoint /usr/bin/tini \
+            -v "$GITHUB_WORKSPACE":/github/workspace \
+            -v "$GITHUB_EVENT_PATH":/github/event.json:ro \
+            -e GITHUB_REPOSITORY="$GITHUB_REPOSITORY" \
+            -e GITHUB_EVENT_PATH=/github/event.json \
+            -e GITHUB_DEFAULT_BRANCH=main \
+            -e INPUT_GITHUB_TOKEN="$GITHUB_TOKEN" \
+            -e INPUT_CONFIG_PATH=.gate.yml \
+            -e INPUT_PREVIEW_URL=http://127.0.0.1:4311 \
+            -e GATE_ENGINE_ENDPOINT=http://127.0.0.1:8791 \
+            -e GATE_ENGINE_HMAC_SECRET="$ENGINE_HMAC_SECRET" \
+            gate-action:local -- node /app/packages/action/dist/main.js
+
+      - name: Engine log
+        if: always()
+        run: tail -50 /tmp/engine.log || true
